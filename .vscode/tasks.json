@@ -1,0 +1,31 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "docker_build",
+            "type": "shell",
+            "command": "docker build -t python-jupyter:latest .",
+        },
+        {
+            "label": "docker_run",
+            "type": "shell",
+            "command": "docker run -p 127.0.0.1:8888:8888 --name jupython --mount type=bind,source=$(pwd)/files_for_image,target=/files python-jupyter:latest"
+        }, 
+        {
+            "label": "docker_start",
+            "type": "shell",
+            "command": "docker start jupython",
+        },
+        {
+            "label": "docker_first_run",
+            "dependsOn": ["docker_build", "docker_run"],
+            "dependsOrder": "sequence"
+        }, 
+        {
+            "label": "docker_subsequent_run",
+            "dependsOn": "docker_start"
+        }
+    ]
+}
